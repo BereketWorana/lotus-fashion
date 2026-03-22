@@ -1,0 +1,272 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* LOTUS Luxury Dark Theme */
+  --background: #080706;
+  --foreground: #f0e8d5;
+  --card: #131110;
+  --card-foreground: #f0e8d5;
+  --popover: #131110;
+  --popover-foreground: #f0e8d5;
+  --primary: #c8973a;
+  --primary-foreground: #080706;
+  --secondary: #1a1816;
+  --secondary-foreground: #f0e8d5;
+  --muted: #1a1816;
+  --muted-foreground: #7a6e5c;
+  --accent: #e2b45a;
+  --accent-foreground: #080706;
+  --destructive: #dc2626;
+  --destructive-foreground: #f0e8d5;
+  --border: rgba(200, 151, 58, 0.15);
+  --input: rgba(200, 151, 58, 0.1);
+  --ring: #c8973a;
+  --radius: 0.5rem;
+  
+  /* Custom LOTUS Colors */
+  --lotus-gold: #c8973a;
+  --lotus-gold-light: #e2b45a;
+  --lotus-black: #080706;
+  --lotus-card: #131110;
+  --lotus-cream: #f0e8d5;
+  --lotus-muted: #7a6e5c;
+}
+
+@theme inline {
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-mono: 'Geist Mono', monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--lotus-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--lotus-gold);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--lotus-gold-light);
+}
+
+/* Ethiopian Textile Pattern Background */
+.lotus-pattern {
+  background-image: 
+    linear-gradient(45deg, rgba(200, 151, 58, 0.03) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(200, 151, 58, 0.03) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(200, 151, 58, 0.03) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(200, 151, 58, 0.03) 75%);
+  background-size: 60px 60px;
+  background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+}
+
+/* Gold Shimmer Animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(200, 151, 58, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Marquee Animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* Ken Burns Effect */
+@keyframes kenburns {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+.ken-burns {
+  animation: kenburns 10s ease-out forwards;
+}
+
+/* Gold Border Glow */
+.gold-border {
+  border: 1px solid rgba(200, 151, 58, 0.2);
+}
+
+.gold-border-strong {
+  border: 1px solid rgba(200, 151, 58, 0.4);
+}
+
+/* Custom Cursor */
+.custom-cursor {
+  cursor: none;
+}
+
+/* Lotus Bloom Animation */
+@keyframes bloom {
+  0% {
+    transform: scale(0.8) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.05) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+.lotus-bloom {
+  animation: bloom 1.5s ease-out forwards;
+}
+
+/* Number Count Animation Support */
+.count-up {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Parallax Scroll */
+.parallax {
+  will-change: transform;
+}
+
+/* Horizontal Scroll Container */
+.horizontal-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: hidden;
+}
+
+/* Hide scrollbar for horizontal sections */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Product Card Hover Effects */
+.product-card {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 25px 50px -12px rgba(200, 151, 58, 0.15);
+}
+
+/* Smooth Image Scale */
+.image-scale {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.image-scale:hover {
+  transform: scale(1.08);
+}
+
+/* Gold Underline Animation */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--lotus-gold);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Selection Style */
+::selection {
+  background: var(--lotus-gold);
+  color: var(--lotus-black);
+}
