@@ -3,7 +3,7 @@
 An Ethiopian luxury fashion e-commerce frontend built with Next.js, TypeScript, and Framer Motion.
 
 ## 🌐 Live Demo
-👉 [View Live](https://lotus-fashion-nsvyx7n9w-bereketworana-bots-projects.vercel.app)
+👉 [View Live](https://lotus-fashion.vercel.app)
 
 ## ✨ Features
 - Animated hero section with parallax scrolling
