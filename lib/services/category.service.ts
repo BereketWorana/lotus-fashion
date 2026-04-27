@@ -1,9 +1,8 @@
 // lib/services/category.service.ts
 import { databases, getDatabaseId, COLLECTIONS } from '../appwrite';
-import { Query } from 'appwrite';
+import { Query, type Models } from 'appwrite';
 
-export interface Category {
-    $id?: string;
+export interface Category extends Models.Document {
     name: string;
     slug: string;
     description?: string;
@@ -18,7 +17,7 @@ const collectionId = COLLECTIONS.categories;
 export const categoryService = {
     async getAll() {
         try {
-            const response = await databases.listDocuments(
+            const response = await databases.listDocuments<Category>(
                 databaseId,
                 collectionId,
                 [
@@ -26,7 +25,7 @@ export const categoryService = {
                     Query.orderAsc('order')
                 ]
             );
-            return response.documents as Category[];
+            return response.documents;
         } catch (error) {
             console.error('Error fetching categories:', error);
             return [];
@@ -35,12 +34,12 @@ export const categoryService = {
 
     async getBySlug(slug: string) {
         try {
-            const response = await databases.listDocuments(
+            const response = await databases.listDocuments<Category>(
                 databaseId,
                 collectionId,
                 [Query.equal('slug', slug)]
             );
-            return response.documents[0] as Category || null;
+            return response.documents[0] || null;
         } catch (error) {
             console.error('Error fetching category:', error);
             return null;

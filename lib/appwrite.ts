@@ -1,18 +1,26 @@
 // lib/appwrite.ts
 import { Client, Account, Databases, Storage, ID } from 'appwrite';
 
-// Hardcoded for production - fix CORS issue
-const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-const PROJECT_ID = '69e9cc62003e59c9ab50';
-const DATABASE_ID = '69e9d5c6001081a4459f';
+const getEnvVar = (name: string): string => {
+    const value = process.env[name];
+    if (!value) {
+        throw new Error(`Environment variable ${name} is not defined. Please check your .env.local file.`);
+    }
+    return value;
+};
+
+// Appwrite Configuration
+const ENDPOINT = getEnvVar('NEXT_PUBLIC_APPWRITE_ENDPOINT');
+const PROJECT_ID = getEnvVar('NEXT_PUBLIC_APPWRITE_PROJECT_ID');
+const DATABASE_ID = getEnvVar('NEXT_PUBLIC_APPWRITE_DATABASE_ID');
 
 // Collection IDs
 export const COLLECTIONS = {
-    categories: '69e9e7340034d1d07980',
-    products: '69e9e7380009cc825fc0',
-    users_profile: '69e9e74000132b1598df',
-    cart_items: '69e9e7450007fd2d4090',
-    orders: '69e9e74800165185a208',
+    categories: getEnvVar('NEXT_PUBLIC_APPWRITE_CATEGORIES_ID'),
+    products: getEnvVar('NEXT_PUBLIC_APPWRITE_PRODUCTS_ID'),
+    users_profile: getEnvVar('NEXT_PUBLIC_APPWRITE_USERS_PROFILE_ID'),
+    cart_items: getEnvVar('NEXT_PUBLIC_APPWRITE_CART_ITEMS_ID'),
+    orders: getEnvVar('NEXT_PUBLIC_APPWRITE_ORDERS_ID'),
 } as const;
 
 const client = new Client()

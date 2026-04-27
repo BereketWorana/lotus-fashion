@@ -42,6 +42,8 @@ export default function CheckoutPage() {
     postalCode: '',
   })
 
+  const [paymentMethod, setPaymentMethod] = useState<'cod' | 'chapa' | 'stripe'>('cod')
+
   const subtotal = getTotal()
   const shippingCost = 0 // Free shipping
   const total = subtotal + shippingCost
@@ -51,6 +53,11 @@ export default function CheckoutPage() {
   }
 
   const handlePlaceOrder = async () => {
+    if (paymentMethod !== 'cod') {
+      setError('Selected payment method is coming soon. Please use Cash on Delivery.')
+      return
+    }
+
     setError('')
     setLoading(true)
     try {
@@ -69,6 +76,7 @@ export default function CheckoutPage() {
         total: total,
         currency: currency,
         etbRate: etbRate,
+        paymentMethod: paymentMethod,
         shippingName: shipping.name,
         shippingEmail: shipping.email,
         shippingPhone: shipping.phone,
@@ -404,6 +412,72 @@ export default function CheckoutPage() {
                 <p className="text-sm text-[#7a6e5c] mt-1">{shipping.address}</p>
                 <p className="text-sm text-[#7a6e5c]">{shipping.city}, {shipping.country} {shipping.postalCode}</p>
                 <p className="text-sm text-[#7a6e5c] mt-2">{shipping.email} · {shipping.phone}</p>
+              </div>
+
+              {/* Payment Method Selector */}
+              <div className="mb-6">
+                <h2 className="text-sm text-[#7a6e5c] tracking-wider uppercase mb-4">Payment Method</h2>
+                <div className="space-y-3">
+                  {/* Cash on Delivery */}
+                  <button
+                    onClick={() => setPaymentMethod('cod')}
+                    className={`w-full p-4 flex items-center justify-between border transition-all ${
+                      paymentMethod === 'cod' ? 'bg-[#c8973a]/10 border-[#c8973a]' : 'bg-[#131110] border-[#c8973a]/10 hover:border-[#c8973a]/30'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'cod' ? 'border-[#c8973a]' : 'border-[#7a6e5c]'}`}>
+                        {paymentMethod === 'cod' && <div className="w-2 h-2 rounded-full bg-[#c8973a]" />}
+                      </div>
+                      <span className="text-sm text-[#f0e8d5]">Cash on Delivery</span>
+                    </div>
+                    <Check className={`w-4 h-4 text-[#c8973a] transition-opacity ${paymentMethod === 'cod' ? 'opacity-100' : 'opacity-0'}`} />
+                  </button>
+
+                  {/* Chapa */}
+                  <button
+                    onClick={() => setPaymentMethod('chapa')}
+                    className={`w-full p-4 flex items-center justify-between border transition-all ${
+                      paymentMethod === 'chapa' ? 'bg-[#c8973a]/10 border-[#c8973a]' : 'bg-[#131110] border-[#c8973a]/10 hover:border-[#c8973a]/30'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'chapa' ? 'border-[#c8973a]' : 'border-[#7a6e5c]'}`}>
+                        {paymentMethod === 'chapa' && <div className="w-2 h-2 rounded-full bg-[#c8973a]" />}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-[#f0e8d5]">Pay with Chapa</span>
+                        <span className="text-[10px] bg-[#c8973a]/20 text-[#c8973a] px-2 py-0.5 tracking-tighter">COMING SOON</span>
+                      </div>
+                    </div>
+                  </button>
+
+                  {/* Stripe */}
+                  <button
+                    onClick={() => setPaymentMethod('stripe')}
+                    className={`w-full p-4 flex items-center justify-between border transition-all ${
+                      paymentMethod === 'stripe' ? 'bg-[#c8973a]/10 border-[#c8973a]' : 'bg-[#131110] border-[#c8973a]/10 hover:border-[#c8973a]/30'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${paymentMethod === 'stripe' ? 'border-[#c8973a]' : 'border-[#7a6e5c]'}`}>
+                        {paymentMethod === 'stripe' && <div className="w-2 h-2 rounded-full bg-[#c8973a]" />}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-[#f0e8d5]">Pay with Stripe</span>
+                        <span className="text-[10px] bg-[#c8973a]/20 text-[#c8973a] px-2 py-0.5 tracking-tighter">COMING SOON</span>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* Info Banner */}
+              <div className="mb-8 p-4 bg-[#c8973a]/5 border border-[#c8973a]/20 flex items-start gap-3">
+                <CreditCard className="w-5 h-5 text-[#c8973a] mt-0.5" />
+                <p className="text-xs text-[#7a6e5c] leading-relaxed">
+                  Secure payment processing coming soon. Orders can currently be placed using <span className="text-[#c8973a]">Cash on Delivery</span>.
+                </p>
               </div>
 
               {/* Totals */}

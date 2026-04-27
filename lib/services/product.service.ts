@@ -1,11 +1,10 @@
 // lib/services/product.service.ts
 import { databases, getDatabaseId, COLLECTIONS, ID } from '../appwrite';
-import { Query } from 'appwrite';
+import { Query, type Models } from 'appwrite';
 
 // Product interface matching BOTH Appwrite schema and UI expectations
-export interface Product {
-  $id?: string;
-  id: number;           // UI uses this, we'll map from Appwrite
+export interface Product extends Models.Document {
+  id: number;           // Numeric ID stored in Appwrite
   name: string;
   slug: string;
   description: string;
@@ -13,12 +12,12 @@ export interface Product {
   originalPrice?: number;
   priceUSD: number;
   priceETB: number;
-  tag: string;          // "Heritage" | "New" | "Sale"
-  category: string;      // "Women" | "Men" | "Streetwear"
-  categoryId: string;    // Appwrite reference
+  tag: string;
+  category: string;
+  categoryId: string;
   origin: string;
-  images: string[];      // Appwrite uses array
-  image: string;         // UI uses single string (we'll map from images[0])
+  images: string[];
+  image: string;         // UI uses this (mapped from images[0])
   sizes: string[];
   colors?: string[];
   inStock: boolean;
@@ -26,20 +25,18 @@ export interface Product {
   material?: string;
   careInstructions?: string;
   sku: string;
-  createdAt?: string;
-  updatedAt?: string;
 }
 
 const databaseId = getDatabaseId();
 const collectionId = COLLECTIONS.products;
 
 // Helper: Map Appwrite document to Product interface
-function mapToProduct(doc: any): Product {
+function mapToProduct(doc: Product): Product {
   return {
     ...doc,
     id: doc.id || 0,
-    price: doc.priceUSD || doc.price || 0,
-    image: doc.image || (doc.images && doc.images.length > 0 ? doc.images[0] : ''),
+    price: doc.priceUSD || 0,
+    image: (doc.images && doc.images.length > 0 ? doc.images[0] : ''),
     category: doc.category || 'Women',
   };
 }
@@ -48,7 +45,7 @@ export const productService = {
   // Get all products
   async getAll(): Promise<Product[]> {
     try {
-      const response = await databases.listDocuments(databaseId, collectionId);
+      const response = await databases.listDocuments<Product>(databaseId, collectionId);
       return response.documents.map(mapToProduct);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -59,7 +56,7 @@ export const productService = {
   // Get featured products
   async getFeatured(limit: number = 4): Promise<Product[]> {
     try {
-      const response = await databases.listDocuments(
+      const response = await databases.listDocuments<Product>(
         databaseId,
         collectionId,
         [
@@ -78,7 +75,7 @@ export const productService = {
   // Get product by ID (number)
   async getById(id: number): Promise<Product | null> {
     try {
-      const response = await databases.listDocuments(
+      const response = await databases.listDocuments<Product>(
         databaseId,
         collectionId,
         [Query.equal('id', id)]
@@ -96,7 +93,7 @@ export const productService = {
   // Get product by slug
   async getBySlug(slug: string): Promise<Product | null> {
     try {
-      const response = await databases.listDocuments(
+      const response = await databases.listDocuments<Product>(
         databaseId,
         collectionId,
         [Query.equal('slug', slug)]
@@ -126,7 +123,7 @@ export const productService = {
         queries.push(Query.equal('category', category));
       }
 
-      const response = await databases.listDocuments(
+      const response = await databases.listDocuments<Product>(
         databaseId,
         collectionId,
         queries

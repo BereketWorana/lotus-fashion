@@ -1,97 +1,73 @@
 # 🪷 Lotus Fashion
 
-An Ethiopian luxury fashion e-commerce platform built with Next.js, TypeScript, Appwrite, and Framer Motion.
+Lotus Fashion is an Ethiopian luxury fashion e-commerce platform designed to showcase and sell editorial-grade fashion pieces. It features a stunning, high-end visual identity with real-time currency conversion and a seamless shopping experience.
 
-## 🌐 Live Demo
-
-👉 [View Live](https://lotus-fashion.vercel.app)
-
-## ✨ Features
-
-- 🛍️ **Product Shop** — Browse 12+ luxury Ethiopian fashion pieces
-- 🔍 **Category Filtering** — Women, Men, Streetwear, New In, Sale
-- 🛒 **Full Cart System** — Add/remove items, select sizes, quantity controls
-- 💱 **Live Currency Toggle** — USD ⇄ ETB with real-time exchange rates
-- 👤 **User Authentication** — Sign up, login, logout via Appwrite Auth
-- 📦 **Persistent Cart** — Saved to database, survives refreshes
-- 💳 **Checkout Flow** — Multi-step: Cart → Shipping → Order Confirmation
-- 🎨 **Custom Animations** — Framer Motion parallax, zoom, and scroll effects
-- 🪷 **Custom Lotus SVG Logo** — Animated brand identity
-- 📱 **Fully Responsive** — Mobile, tablet, and desktop
+## 🚀 Live Demo
+[https://lotus-fashion-f17k.vercel.app](https://lotus-fashion-f17k.vercel.app)
 
 ## 🛠️ Tech Stack
+- **Framework:** Next.js
+- **Language:** TypeScript
+- **Backend/Auth/Database:** Appwrite
+- **Styling:** Tailwind CSS
+- **Animations:** Framer Motion
 
-| Layer | Technology |
+## 📋 Prerequisites
+- Node.js 18+
+- Appwrite account
+- Vercel account
+
+## ⚙️ Setup Guide
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/BereketWorana/lotus-fashion.git
+   cd lotus-fashion
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables:**
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. **Fill in your credentials:**
+   Open `.env.local` and add your Appwrite endpoint, project ID, database ID, and collection IDs.
+
+5. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+## 🔐 Environment Variables
+
+| Variable | Description |
 | :--- | :--- |
-| **Frontend** | Next.js 16, React 19, TypeScript |
-| **Styling** | Tailwind CSS 4, Framer Motion |
-| **UI Components** | Radix UI, Lucide Icons |
-| **Backend/Database** | Appwrite (PostgreSQL) |
-| **Auth** | Appwrite Auth |
-| **Hosting** | Vercel |
-| **AI Assistant** | CodeAnt Gravity, DeepSeek |
+| `NEXT_PUBLIC_APPWRITE_ENDPOINT` | Your Appwrite instance URL (e.g., https://cloud.appwrite.io/v1) |
+| `NEXT_PUBLIC_APPWRITE_PROJECT_ID` | Your Appwrite project ID |
+| `NEXT_PUBLIC_APPWRITE_DATABASE_ID` | Your Appwrite database ID |
+| `NEXT_PUBLIC_APPWRITE_CATEGORIES_ID` | Collection ID for fashion categories |
+| `NEXT_PUBLIC_APPWRITE_PRODUCTS_ID` | Collection ID for fashion products |
+| `NEXT_PUBLIC_APPWRITE_USERS_PROFILE_ID` | Collection ID for user profile data |
+| `NEXT_PUBLIC_APPWRITE_CART_ITEMS_ID` | Collection ID for persistent cart storage |
+| `NEXT_PUBLIC_APPWRITE_ORDERS_ID` | Collection ID for order history |
+| `APPWRITE_API_KEY` | (Optional) Server-side API key for administrative tasks |
 
 ## 📁 Project Structure
-lotus-fashion/
-├── app/ # Next.js App Router pages
-│ ├── auth/ # Login & Signup
-│ ├── checkout/ # Multi-step checkout
-│ ├── product/[id]/ # Product detail pages
-│ └── shop/ # Shop with filtering
-├── components/ # React components
-│ ├── home/ # Homepage sections
-│ └── ui/ # shadcn/ui components
-├── lib/ # Services & utilities
-│ ├── services/ # Appwrite services
-│ │ ├── auth.service.ts
-│ │ ├── product.service.ts
-│ │ ├── category.service.ts
-│ │ └── currency.service.ts
-│ ├── appwrite.ts # Appwrite client config
-│ ├── products.ts # Product data bridge
-│ └── cart-context.tsx # Cart state management
-├── hooks/ # Custom React hooks
-├── scripts/ # Database seed scripts
-└── styles/ # Global styles
-
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Node.js 18+
-- Appwrite account (free tier)
-- Vercel account (for deployment)
-
-### Setup
-
-1. **Clone the repository**
-```bash
-git clone https://github.com/BereketWorana/lotus-fashion.git
-cd lotus-fashion
-```
-
-2. **Install dependencies**
-```bash
-npm install
-```
-
-3. **Set up Environment Variables**
-Create a `.env.local` file in the root directory and add your Appwrite API Key:
-```env
-APPWRITE_API_KEY=your_appwrite_api_key
-```
-*(Note: Client-side Appwrite Project ID and Database ID are configured in `lib/appwrite.ts`)*
-
-4. **Run the development server**
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to experience the luxury.
+- `app/` - Next.js App Router pages and layouts.
+- `components/` - Reusable UI components (Navbar, Cart, Product Cards).
+- `lib/` - Service layers (Auth, Products, Cart) and Appwrite configuration.
+- `hooks/` - Custom React hooks for animations and scroll effects.
+- `public/` - Static assets and SVG graphics.
+- `styles/` - Global CSS and Tailwind configurations.
 
 ## 👨‍💻 Author
-
-**Bereket Worana** — [github.com/BereketWorana](https://github.com/BereketWorana)
+**Bereket Worana**
 
 ---
 *From the mud, the lotus blooms.*

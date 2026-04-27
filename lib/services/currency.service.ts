@@ -36,6 +36,13 @@ function setCachedRate(rate: number): void {
   }
 }
 
+interface ExchangeRateResponse {
+  rates: {
+    ETB: number;
+    [key: string]: number;
+  };
+}
+
 export async function getExchangeRate(): Promise<number> {
   // Check cache first
   const cached = getCachedRate()
@@ -44,8 +51,8 @@ export async function getExchangeRate(): Promise<number> {
   try {
     const response = await fetch(API_URL)
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
-    const data = await response.json()
-    const rate = data?.rates?.ETB
+    const data = (await response.json()) as ExchangeRateResponse
+    const rate = data.rates.ETB
     if (typeof rate === 'number' && rate > 0) {
       setCachedRate(rate)
       return rate
