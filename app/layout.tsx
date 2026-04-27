@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { DM_Sans, Cormorant_Garamond } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
+import { AuthProvider } from '@/lib/auth-context'
 import { CartProvider } from '@/lib/cart-context'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
@@ -49,15 +50,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${dmSans.variable} ${cormorant.variable}`}>
       <body className="font-sans antialiased bg-[#080706] text-[#f0e8d5] lotus-pattern min-h-screen">
-        <CartProvider>
-          <CustomCursor />
-          <Navbar />
-          <main className="relative">
-            {children}
-          </main>
-          <Footer />
-          <CartDrawer />
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <CustomCursor />
+            <Navbar />
+            <main className="relative">
+              {children}
+            </main>
+            <Footer />
+            <CartDrawer />
+          </CartProvider>
+        </AuthProvider>
         <Analytics />
       </body>
     </html>

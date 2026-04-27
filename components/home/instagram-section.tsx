@@ -6,12 +6,12 @@ import { Instagram } from 'lucide-react'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 
 const instagramImages = [
-  'https://images.pexels.com/photos/33968170/pexels-photo-33968170.jpeg',
-  'https://images.pexels.com/photos/29076955/pexels-photo-29076955.jpeg',
-  'https://images.pexels.com/photos/28635266/pexels-photo-28635266.jpeg',
-  'https://images.pexels.com/photos/17430755/pexels-photo-17430755.jpeg',
-  'https://images.pexels.com/photos/19179683/pexels-photo-19179683.jpeg',
-  'https://images.pexels.com/photos/11440539/pexels-photo-11440539.jpeg',
+  'https://i.imgur.com/0bfNVOR.jpeg',
+  'https://i.imgur.com/EHKqINL.jpeg',
+  'https://i.imgur.com/D3mlt5a.png',
+  'https://i.imgur.com/ihir3sM.jpeg',
+  'https://i.imgur.com/BPLiH5W.jpeg',
+  'https://i.imgur.com/f9gjlmn.jpeg',
 ]
 
 export function InstagramSection() {

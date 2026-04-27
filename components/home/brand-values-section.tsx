@@ -1,28 +1,24 @@
 "use client"
 
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
 
 const values = [
   {
-    icon: '🌸',
-    title: 'Born to Bloom',
-    description: 'Every piece tells a story of transformation and becoming your best self.'
-  },
-  {
-    icon: '🧵',
-    title: 'Ethiopian Craft',
+    image: 'https://i.imgur.com/zxPWzu8.jpeg',
+    title: 'Artisan Weaving',
     description: 'Traditional techniques passed down through generations of master artisans.'
   },
   {
-    icon: '🌍',
-    title: 'Made in Addis',
-    description: 'Proudly designed and handcrafted in the heart of Addis Ababa, Ethiopia.'
+    image: 'https://i.imgur.com/doylj1g.png',
+    title: 'Tibeb Embroidery',
+    description: 'Every piece tells a story of transformation and becoming your best self.'
   },
   {
-    icon: '♻️',
-    title: 'Ethical Always',
-    description: 'Fair wages, sustainable materials, and respect for people and planet.'
+    image: 'https://i.imgur.com/aAXZ30R.jpeg',
+    title: 'Silk Texture',
+    description: 'Premium materials sourced ethically for the ultimate luxury feel.'
   }
 ]
 
@@ -32,7 +28,7 @@ export function BrandValuesSection() {
   return (
     <section ref={ref} className="py-24 md:py-32 border-y border-[#c8973a]/10 bg-[#0a0908]">
       <div className="container mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
           {values.map((value, index) => (
             <motion.div
               key={value.title}
@@ -42,13 +38,14 @@ export function BrandValuesSection() {
               whileHover={{ y: -8 }}
               className="group text-center p-8 bg-[#131110] border border-[#c8973a]/10 hover:border-[#c8973a]/30 transition-all cursor-default"
             >
-              <motion.div 
-                className="text-4xl mb-4"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ type: "spring", stiffness: 400 }}
-              >
-                {value.icon}
-              </motion.div>
+              <div className="relative w-full aspect-[4/3] mb-6 overflow-hidden rounded-sm">
+                <Image 
+                  src={value.image} 
+                  alt={value.title} 
+                  fill 
+                  className="object-cover transition-transform duration-700 group-hover:scale-105" 
+                />
+              </div>
               <h3 className="font-serif text-xl text-[#f0e8d5] mb-3 group-hover:text-[#c8973a] transition-colors">
                 {value.title}
               </h3>

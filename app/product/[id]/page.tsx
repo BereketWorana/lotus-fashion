@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, use } from 'react'
+import { useState, useEffect, use } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
@@ -9,6 +9,7 @@ import { Check, Truck, Shield, RotateCcw, Heart } from 'lucide-react'
 import { getProductById, products } from '@/lib/products'
 import { useCart } from '@/lib/cart-context'
 import { ProductCard } from '@/components/product-card'
+import type { Product } from '@/lib/products'
 
 const perks = [
   { icon: Truck, label: 'Free shipping on orders over $200' },
@@ -18,21 +19,54 @@ const perks = [
 
 export default function ProductPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params)
-  const product = getProductById(parseInt(resolvedParams.id))
+  const [product, setProduct] = useState<Product | null>(null)
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
   const [isImageZoomed, setIsImageZoomed] = useState(false)
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const { addToCart, formatPrice } = useCart()
   const [isAdded, setIsAdded] = useState(false)
 
+  useEffect(() => {
+    async function fetchProduct() {
+      setLoading(true)
+      try {
+        const productId = parseInt(resolvedParams.id)
+        const foundProduct = await getProductById(productId)
+        if (foundProduct) {
+          setProduct(foundProduct)
+          // Get related products
+          const allProducts = await products()
+          const related = allProducts
+            .filter(p => p.category === foundProduct.category && p.id !== foundProduct.id)
+            .slice(0, 4)
+          setRelatedProducts(related)
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProduct()
+  }, [resolvedParams.id])
+
+  if (loading) {
+    return (
+      <main className="pt-24 pb-24">
+        <div className="container mx-auto px-6 lg:px-12">
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <div className="text-[#c8973a] font-serif text-xl">Loading product...</div>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
   if (!product) {
     notFound()
   }
-
-  // Get related products (same category, different product)
-  const relatedProducts = products
-    .filter(p => p.category === product.category && p.id !== product.id)
-    .slice(0, 4)
 
   const handleAddToCart = () => {
     if (!selectedSize) return
@@ -245,7 +279,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: string }
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {relatedProducts.map((relatedProduct, index) => (
               <ProductCard 
-                key={relatedProduct.id} 
+                key={relatedProduct.$id || relatedProduct.id} 
                 product={relatedProduct} 
                 index={index}
               />

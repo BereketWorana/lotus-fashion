@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, Menu, X } from 'lucide-react'
+import { ShoppingBag, Menu, X, User, LogOut } from 'lucide-react'
 import { useCart } from '@/lib/cart-context'
+import { useAuth } from '@/lib/auth-context'
 import { useScrollDirection } from '@/hooks/use-scroll-animation'
 
 const navLinks = [
@@ -18,6 +19,7 @@ const navLinks = [
 export function Navbar() {
   const pathname = usePathname()
   const { toggleCart, getTotalItems, currency, setCurrency } = useCart()
+  const { user, logout, loading: authLoading } = useAuth()
   const { scrollY } = useScrollDirection()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   
@@ -28,6 +30,11 @@ export function Navbar() {
   useEffect(() => {
     setMobileMenuOpen(false)
   }, [pathname])
+
+  const handleLogout = async () => {
+    await logout()
+    setMobileMenuOpen(false)
+  }
 
   return (
     <>
@@ -81,6 +88,35 @@ export function Navbar() {
                 <span>/</span>
                 <span className={currency === 'ETB' ? 'text-[#c8973a]' : ''}>ETB</span>
               </button>
+
+              {/* Auth - Desktop */}
+              <div className="hidden md:flex items-center">
+                {authLoading ? (
+                  <div className="w-4 h-4 border-2 border-[#7a6e5c]/30 border-t-[#7a6e5c] rounded-full animate-spin" />
+                ) : user ? (
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-[#7a6e5c] tracking-wider">
+                      {user.name || user.email}
+                    </span>
+                    <button
+                      onClick={handleLogout}
+                      className="p-2 text-[#7a6e5c] hover:text-[#c8973a] transition-colors"
+                      aria-label="Logout"
+                      title="Logout"
+                    >
+                      <LogOut className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    href="/auth/login"
+                    className="flex items-center gap-2 text-xs tracking-wider text-[#7a6e5c] hover:text-[#c8973a] transition-colors"
+                  >
+                    <User className="w-4 h-4" />
+                    SIGN IN
+                  </Link>
+                )}
+              </div>
 
               {/* Cart Button */}
               <button
@@ -156,14 +192,44 @@ export function Navbar() {
                   </Link>
                 </motion.div>
               ))}
+
+              {/* Auth - Mobile */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+                className="mt-4"
+              >
+                {user ? (
+                  <div className="flex flex-col items-center gap-3">
+                    <span className="text-sm text-[#7a6e5c]">{user.name || user.email}</span>
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 text-sm text-[#c8973a] hover:underline"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    href="/auth/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2 text-sm text-[#c8973a] hover:underline"
+                  >
+                    <User className="w-4 h-4" />
+                    Sign In
+                  </Link>
+                )}
+              </motion.div>
               
               {/* Currency Toggle in Mobile */}
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5, duration: 0.4 }}
+                transition={{ delay: 0.6, duration: 0.4 }}
                 onClick={() => setCurrency(currency === 'USD' ? 'ETB' : 'USD')}
-                className="mt-8 flex items-center gap-2 text-sm tracking-wider text-[#7a6e5c]"
+                className="mt-4 flex items-center gap-2 text-sm tracking-wider text-[#7a6e5c]"
               >
                 <span className={currency === 'USD' ? 'text-[#c8973a]' : ''}>USD</span>
                 <span className="text-[#c8973a]">/</span>

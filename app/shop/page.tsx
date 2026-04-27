@@ -3,8 +3,9 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
-import { products, getProductsByCategory } from '@/lib/products'
+import { getProductsByCategory } from '@/lib/products'
 import { ProductCard } from '@/components/product-card'
+import type { Product } from '@/lib/products'
 
 const categories = ['All', 'Women', 'Men', 'Streetwear', 'New In', 'Sale']
 
@@ -12,7 +13,8 @@ function ShopContent() {
   const searchParams = useSearchParams()
   const categoryParam = searchParams.get('category')
   const [activeCategory, setActiveCategory] = useState(categoryParam || 'All')
-  const [filteredProducts, setFilteredProducts] = useState(products)
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     if (categoryParam && categories.includes(categoryParam)) {
@@ -21,7 +23,19 @@ function ShopContent() {
   }, [categoryParam])
 
   useEffect(() => {
-    setFilteredProducts(getProductsByCategory(activeCategory))
+    async function fetchProducts() {
+      setLoading(true)
+      try {
+        const data = await getProductsByCategory(activeCategory)
+        setFilteredProducts(data)
+      } catch (error) {
+        console.error('Error fetching products:', error)
+        setFilteredProducts([])
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProducts()
   }, [activeCategory])
 
   return (
@@ -78,7 +92,7 @@ function ShopContent() {
           animate={{ opacity: 1 }}
           className="text-[#7a6e5c] text-sm"
         >
-          Showing {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'}
+          {loading ? 'Loading...' : `Showing ${filteredProducts.length} ${filteredProducts.length === 1 ? 'product' : 'products'}`}
         </motion.p>
       </section>
 
@@ -95,7 +109,7 @@ function ShopContent() {
           >
             {filteredProducts.map((product, index) => (
               <ProductCard 
-                key={product.id} 
+                key={product.$id || product.id} 
                 product={product} 
                 index={index}
               />

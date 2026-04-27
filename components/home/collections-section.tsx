@@ -1,18 +1,46 @@
 "use client"
 
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { products } from '@/lib/products'
 import { ProductCard } from '@/components/product-card'
 import { useScrollAnimation } from '@/hooks/use-scroll-animation'
+import type { Product } from '@/lib/products'
 
 export function CollectionsSection() {
   const { ref: menRef, isVisible: menVisible } = useScrollAnimation(0.1)
   const { ref: womenRef, isVisible: womenVisible } = useScrollAnimation(0.1)
 
-  const womenProducts = products.filter(p => p.category === 'Women').slice(0, 4)
-  const menProducts = products.filter(p => p.category === 'Men').slice(0, 3)
+  const [womenProducts, setWomenProducts] = useState<Product[]>([])
+  const [menProducts, setMenProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const allProducts = await products()
+        setWomenProducts(allProducts.filter(p => p.category === 'Women').slice(0, 4))
+        setMenProducts(allProducts.filter(p => p.category === 'Men').slice(0, 3))
+      } catch (error) {
+        console.error('Error fetching collections:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchProducts()
+  }, [])
+
+  if (loading) {
+    return (
+      <section className="py-24 md:py-32">
+        <div className="container mx-auto px-6 lg:px-12 text-center">
+          <div className="animate-pulse text-[#7a6e5c]">Loading collections...</div>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <>
@@ -45,7 +73,7 @@ export function CollectionsSection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {womenProducts.map((product, index) => (
               <ProductCard 
-                key={product.id} 
+                key={product.$id || product.id} 
                 product={product} 
                 index={index}
               />
@@ -83,7 +111,7 @@ export function CollectionsSection() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {menProducts.map((product, index) => (
               <ProductCard 
-                key={product.id} 
+                key={product.$id || product.id} 
                 product={product} 
                 index={index}
               />

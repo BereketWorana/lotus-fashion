@@ -191,15 +191,15 @@ export function HeroSection() {
               initial={{ opacity: 0, scale: 1.1 }}
               animate={mounted ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 1.2, delay: 0.3 }}
-              className="relative h-full w-full overflow-hidden"
+              className="relative h-full w-full"
               style={{ transform: `translateY(${offset * 0.5}px)` }}
             >
               <div className="relative h-full w-full ken-burns">
                 <Image
-                  src="https://images.pexels.com/photos/33968170/pexels-photo-33968170.jpeg"
+                  src="https://i.imgur.com/zfw2pin.jpeg"
                   alt="Ethiopian luxury fashion model"
                   fill
-                  className="object-cover"
+                  className="object-contain lg:object-right"
                   priority
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />

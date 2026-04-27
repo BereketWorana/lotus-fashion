@@ -9,19 +9,19 @@ const team = [
   {
     name: 'Bereket Worana',
     role: 'Founder & Creative Director',
-    image: 'https://images.pexels.com/photos/17430755/pexels-photo-17430755.jpeg',
+    image: 'https://i.imgur.com/kDwL49I.jpeg',
     bio: 'Visionary behind LOTUS, combining Ethiopian heritage with modern luxury.'
   },
   {
     name: 'Selam Tadesse',
     role: 'Head of Design',
-    image: 'https://images.pexels.com/photos/29076955/pexels-photo-29076955.jpeg',
+    image: 'https://i.imgur.com/C5Q6LJV.jpeg',
     bio: 'Award-winning designer bridging traditional techniques with contemporary fashion.'
   },
   {
     name: 'Dawit Alemu',
     role: 'Master Artisan',
-    image: 'https://images.pexels.com/photos/19179683/pexels-photo-19179683.jpeg',
+    image: 'https://i.imgur.com/lPe37fW.jpeg',
     bio: 'Third-generation weaver preserving the ancient art of Ethiopian textiles.'
   }
 ]
@@ -60,7 +60,7 @@ export default function AboutPage() {
           style={{ transform: `translateY(${offset * 0.5}px)` }}
         >
           <Image
-            src="https://images.pexels.com/photos/11440539/pexels-photo-11440539.jpeg"
+            src="https://i.imgur.com/rd7f91H.jpeg"
             alt="Ethiopian artisans at work"
             fill
             className="object-cover"
@@ -115,7 +115,7 @@ export default function AboutPage() {
               className="relative aspect-[4/5] overflow-hidden"
             >
               <Image
-                src="https://images.pexels.com/photos/28635266/pexels-photo-28635266.jpeg"
+                src="https://i.imgur.com/EA3P1tQ.jpeg"
                 alt="Ethiopian textile craftsmanship"
                 fill
                 className="object-cover"
@@ -179,7 +179,7 @@ export default function AboutPage() {
               className="relative aspect-[4/5] overflow-hidden order-1 lg:order-2"
             >
               <Image
-                src="https://images.pexels.com/photos/3298594/pexels-photo-3298594.jpeg"
+                src="https://i.imgur.com/3fz8aJc.jpeg"
                 alt="Sustainable Ethiopian fashion"
                 fill
                 className="object-cover"

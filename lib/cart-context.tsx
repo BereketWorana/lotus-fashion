@@ -1,7 +1,8 @@
 "use client"
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from 'react'
 import type { Product } from './products'
+import { getExchangeRate, formatPriceSync } from './services/currency.service'
 
 export interface CartItem {
   product: Product
@@ -12,10 +13,11 @@ export interface CartItem {
 interface CartContextType {
   items: CartItem[]
   currency: 'USD' | 'ETB'
+  etbRate: number
   isCartOpen: boolean
   addToCart: (product: Product, size: string) => void
-  removeFromCart: (productId: number, size: string) => void
-  updateQuantity: (productId: number, size: string, quantity: number) => void
+  removeFromCart: (productId: number | string, size: string) => void
+  updateQuantity: (productId: number | string, size: string, quantity: number) => void
   clearCart: () => void
   toggleCart: () => void
   closeCart: () => void
@@ -28,12 +30,46 @@ interface CartContextType {
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
-const ETB_RATE = 56.5 // USD to ETB exchange rate
+const CART_STORAGE_KEY = 'lotus_cart'
+
+function loadCartFromStorage(): CartItem[] {
+  if (typeof window === 'undefined') return []
+  try {
+    const stored = localStorage.getItem(CART_STORAGE_KEY)
+    return stored ? JSON.parse(stored) : []
+  } catch {
+    return []
+  }
+}
+
+function saveCartToStorage(items: CartItem[]): void {
+  if (typeof window === 'undefined') return
+  try {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items))
+  } catch {}
+}
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
   const [currency, setCurrency] = useState<'USD' | 'ETB'>('USD')
   const [isCartOpen, setIsCartOpen] = useState(false)
+  const [etbRate, setEtbRate] = useState(155) // sensible default
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    const stored = loadCartFromStorage()
+    if (stored.length > 0) setItems(stored)
+  }, [])
+
+  // Save cart to localStorage on change
+  useEffect(() => {
+    saveCartToStorage(items)
+  }, [items])
+
+  // Fetch live exchange rate on mount
+  useEffect(() => {
+    getExchangeRate().then(rate => setEtbRate(rate))
+  }, [])
 
   const addToCart = useCallback((product: Product, size: string) => {
     setItems(prev => {
@@ -52,13 +88,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setIsCartOpen(true)
   }, [])
 
-  const removeFromCart = useCallback((productId: number, size: string) => {
+  const removeFromCart = useCallback((productId: number | string, size: string) => {
     setItems(prev => prev.filter(
       item => !(item.product.id === productId && item.size === size)
     ))
   }, [])
 
-  const updateQuantity = useCallback((productId: number, size: string, quantity: number) => {
+  const updateQuantity = useCallback((productId: number | string, size: string, quantity: number) => {
     if (quantity < 1) {
       removeFromCart(productId, size)
       return
@@ -89,26 +125,23 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [])
 
   const getTotal = useCallback(() => {
-    const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
-    return currency === 'ETB' ? total * ETB_RATE : total
-  }, [items, currency])
+    return items.reduce((sum, item) => sum + item.product.price * item.quantity, 0)
+  }, [items])
 
   const getTotalItems = useCallback(() => {
     return items.reduce((sum, item) => sum + item.quantity, 0)
   }, [items])
 
   const formatPrice = useCallback((price: number) => {
-    const convertedPrice = currency === 'ETB' ? price * ETB_RATE : price
-    return currency === 'ETB' 
-      ? `ETB ${convertedPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
-      : `$${convertedPrice.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`
-  }, [currency])
+    return formatPriceSync(price, currency, etbRate)
+  }, [currency, etbRate])
 
   return (
     <CartContext.Provider
       value={{
         items,
         currency,
+        etbRate,
         isCartOpen,
         addToCart,
         removeFromCart,

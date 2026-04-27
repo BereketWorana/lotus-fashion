@@ -2,11 +2,13 @@
 
 import { useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react'
 import { useCart } from '@/lib/cart-context'
 
 export function CartDrawer() {
+  const router = useRouter()
   const { 
     items, 
     isCartOpen, 
@@ -16,7 +18,6 @@ export function CartDrawer() {
     getTotal, 
     formatPrice 
   } = useCart()
-  const [showComingSoon, setShowComingSoon] = useState(false)
 
   return (
     <AnimatePresence>
@@ -98,18 +99,14 @@ export function CartDrawer() {
                   <span className="font-serif text-2xl text-[#c8973a]">{formatPrice(getTotal())}</span>
                 </div>
                 <p className="text-xs text-[#7a6e5c]">Shipping and taxes calculated at checkout</p>
-                <AnimatePresence mode="wait">
-                  {showComingSoon ? (
-                    <motion.div key="coming-soon" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="w-full py-4 border border-[#c8973a]/50 text-center">
-                      <p className="text-[#c8973a] font-serif text-sm">Checkout coming soon!</p>
-                      <p className="text-[#7a6e5c] text-xs mt-1">We're working on payments 🛍️</p>
-                    </motion.div>
-                  ) : (
-                    <motion.button key="order-btn" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => setShowComingSoon(true)} className="w-full py-4 bg-[#c8973a] text-[#080706] font-medium text-sm tracking-wider hover:bg-[#e2b45a] transition-colors">
-                      COMPLETE ORDER
-                    </motion.button>
-                  )}
-                </AnimatePresence>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => { closeCart(); router.push('/checkout') }}
+                  className="w-full py-4 bg-[#c8973a] text-[#080706] font-medium text-sm tracking-wider hover:bg-[#e2b45a] transition-colors"
+                >
+                  CHECKOUT
+                </motion.button>
                 <button onClick={closeCart} className="w-full py-3 border border-[#c8973a]/30 text-[#f0e8d5] text-sm tracking-wider hover:border-[#c8973a] transition-colors">
                   CONTINUE SHOPPING
                 </button>
