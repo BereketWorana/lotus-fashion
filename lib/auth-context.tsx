@@ -35,6 +35,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await authService.createAccount(email, password, name)
     const u = await authService.getCurrentUser()
     setUser(u)
+    
+    // Send verification email
+    try {
+      const verificationUrl = `${window.location.origin}/auth/verify`
+      await authService.sendVerification(verificationUrl)
+    } catch (err) {
+      console.error('Failed to send verification email:', err)
+    }
   }, [])
 
   const logout = useCallback(async () => {

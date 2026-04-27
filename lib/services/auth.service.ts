@@ -35,5 +35,25 @@ export const authService = {
   async isLoggedIn(): Promise<boolean> {
     const user = await this.getCurrentUser()
     return user !== null
+  },
+
+  async forgotPassword(email: string, resetUrl: string): Promise<void> {
+    await account.createRecovery(email, resetUrl)
+  },
+
+  async resetPassword(userId: string, secret: string, password: string): Promise<void> {
+    await account.updateRecovery(userId, secret, password)
+  },
+
+  async sendVerification(verificationUrl: string): Promise<void> {
+    await account.createVerification(verificationUrl)
+  },
+
+  async verifyEmail(userId: string, secret: string): Promise<void> {
+    await account.updateVerification(userId, secret)
+  },
+
+  async updatePassword(oldPassword: string, newPassword: string): Promise<void> {
+    await account.updatePassword(newPassword, oldPassword)
   }
 }

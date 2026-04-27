@@ -34,13 +34,15 @@ export default function SignupPage() {
     setLoading(true)
     try {
       await signup(email, password, name)
-      router.push('/')
+      setSuccess(true)
     } catch (err: any) {
       setError(err?.message || 'Something went wrong. Please try again.')
     } finally {
       setLoading(false)
     }
   }
+
+  const [success, setSuccess] = useState(false)
 
   return (
     <main className="pt-32 pb-24 min-h-screen flex items-center justify-center">
@@ -66,133 +68,157 @@ export default function SignupPage() {
 
           {/* Form */}
           <div className="bg-[#131110] border border-[#c8973a]/20 p-8 md:p-10">
-            {error && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-400 text-sm"
-              >
-                {error}
-              </motion.div>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Name */}
-              <div>
-                <label htmlFor="name" className="block text-sm text-[#7a6e5c] mb-2">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a6e5c]" />
-                  <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    className="w-full pl-12 pr-4 py-3 bg-[#0a0908] border border-[#c8973a]/20 text-[#f0e8d5] placeholder:text-[#7a6e5c]/50 focus:border-[#c8973a] focus:outline-none transition-colors"
-                    placeholder="Your full name"
-                  />
+            {success ? (
+              <div className="text-center py-6">
+                <div className="flex justify-center mb-6">
+                  <div className="w-16 h-16 bg-[#c8973a]/10 rounded-full flex items-center justify-center">
+                    <Mail className="w-8 h-8 text-[#c8973a]" />
+                  </div>
                 </div>
-              </div>
-
-              {/* Email */}
-              <div>
-                <label htmlFor="email" className="block text-sm text-[#7a6e5c] mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a6e5c]" />
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    className="w-full pl-12 pr-4 py-3 bg-[#0a0908] border border-[#c8973a]/20 text-[#f0e8d5] placeholder:text-[#7a6e5c]/50 focus:border-[#c8973a] focus:outline-none transition-colors"
-                    placeholder="your@email.com"
-                  />
-                </div>
-              </div>
-
-              {/* Password */}
-              <div>
-                <label htmlFor="password" className="block text-sm text-[#7a6e5c] mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a6e5c]" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    id="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={8}
-                    className="w-full pl-12 pr-12 py-3 bg-[#0a0908] border border-[#c8973a]/20 text-[#f0e8d5] placeholder:text-[#7a6e5c]/50 focus:border-[#c8973a] focus:outline-none transition-colors"
-                    placeholder="Minimum 8 characters"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7a6e5c] hover:text-[#c8973a] transition-colors"
-                  >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                  </button>
-                </div>
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm text-[#7a6e5c] mb-2">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a6e5c]" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    id="confirmPassword"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    required
-                    className="w-full pl-12 pr-4 py-3 bg-[#0a0908] border border-[#c8973a]/20 text-[#f0e8d5] placeholder:text-[#7a6e5c]/50 focus:border-[#c8973a] focus:outline-none transition-colors"
-                    placeholder="Repeat your password"
-                  />
-                </div>
-              </div>
-
-              {/* Submit */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                disabled={loading}
-                className="w-full py-4 bg-[#c8973a] text-[#080706] font-medium text-sm tracking-wider hover:bg-[#e2b45a] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                {loading ? (
-                  <>
-                    <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                      className="w-5 h-5 border-2 border-[#080706]/30 border-t-[#080706] rounded-full"
-                    />
-                    CREATING ACCOUNT...
-                  </>
-                ) : (
-                  'CREATE ACCOUNT'
-                )}
-              </motion.button>
-            </form>
-
-            {/* Divider */}
-            <div className="mt-8 pt-6 border-t border-[#c8973a]/10 text-center">
-              <p className="text-sm text-[#7a6e5c]">
-                Already have an account?{' '}
-                <Link href="/auth/login" className="text-[#c8973a] hover:underline">
-                  Sign in
+                <h3 className="text-[#f0e8d5] text-xl font-serif mb-4">Account Created!</h3>
+                <p className="text-[#7a6e5c] text-sm mb-8">
+                  We've sent a verification link to <span className="text-[#c8973a] font-medium">{email}</span>. 
+                  Please check your inbox to verify your account.
+                </p>
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#c8973a] text-[#080706] font-medium text-sm tracking-wider hover:bg-[#e2b45a] transition-colors"
+                >
+                  CONTINUE TO SHOP
                 </Link>
-              </p>
-            </div>
+              </div>
+            ) : (
+              <>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-400 text-sm"
+                  >
+                    {error}
+                  </motion.div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  {/* ... existing form fields ... */}
+                  {/* Name */}
+                  <div>
+                    <label htmlFor="name" className="block text-sm text-[#7a6e5c] mb-2">
+                      Full Name
+                    </label>
+                    <div className="relative">
+                      <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a6e5c]" />
+                      <input
+                        type="text"
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                        className="w-full pl-12 pr-4 py-3 bg-[#0a0908] border border-[#c8973a]/20 text-[#f0e8d5] placeholder:text-[#7a6e5c]/50 focus:border-[#c8973a] focus:outline-none transition-colors"
+                        placeholder="Your full name"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label htmlFor="email" className="block text-sm text-[#7a6e5c] mb-2">
+                      Email Address
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a6e5c]" />
+                      <input
+                        type="email"
+                        id="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="w-full pl-12 pr-4 py-3 bg-[#0a0908] border border-[#c8973a]/20 text-[#f0e8d5] placeholder:text-[#7a6e5c]/50 focus:border-[#c8973a] focus:outline-none transition-colors"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Password */}
+                  <div>
+                    <label htmlFor="password" className="block text-sm text-[#7a6e5c] mb-2">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a6e5c]" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        id="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        minLength={8}
+                        className="w-full pl-12 pr-12 py-3 bg-[#0a0908] border border-[#c8973a]/20 text-[#f0e8d5] placeholder:text-[#7a6e5c]/50 focus:border-[#c8973a] focus:outline-none transition-colors"
+                        placeholder="Minimum 8 characters"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#7a6e5c] hover:text-[#c8973a] transition-colors"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Confirm Password */}
+                  <div>
+                    <label htmlFor="confirmPassword" className="block text-sm text-[#7a6e5c] mb-2">
+                      Confirm Password
+                    </label>
+                    <div className="relative">
+                      <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#7a6e5c]" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        id="confirmPassword"
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        className="w-full pl-12 pr-4 py-3 bg-[#0a0908] border border-[#c8973a]/20 text-[#f0e8d5] placeholder:text-[#7a6e5c]/50 focus:border-[#c8973a] focus:outline-none transition-colors"
+                        placeholder="Repeat your password"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Submit */}
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-4 bg-[#c8973a] text-[#080706] font-medium text-sm tracking-wider hover:bg-[#e2b45a] transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {loading ? (
+                      <>
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="w-5 h-5 border-2 border-[#080706]/30 border-t-[#080706] rounded-full"
+                        />
+                        CREATING ACCOUNT...
+                      </>
+                    ) : (
+                      'CREATE ACCOUNT'
+                    )}
+                  </motion.button>
+                </form>
+
+                {/* Divider */}
+                <div className="mt-8 pt-6 border-t border-[#c8973a]/10 text-center">
+                  <p className="text-sm text-[#7a6e5c]">
+                    Already have an account?{' '}
+                    <Link href="/auth/login" className="text-[#c8973a] hover:underline">
+                      Sign in
+                    </Link>
+                  </p>
+                </div>
+              </>
+            )}
           </div>
         </motion.div>
       </div>

@@ -90,14 +90,20 @@ export function Navbar() {
               </button>
 
               {/* Auth - Desktop */}
-              <div className="hidden md:flex items-center">
+              <div className="hidden md:flex items-center gap-4">
                 {authLoading ? (
                   <div className="w-4 h-4 border-2 border-[#7a6e5c]/30 border-t-[#7a6e5c] rounded-full animate-spin" />
                 ) : user ? (
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-[#7a6e5c] tracking-wider">
-                      {user.name || user.email}
-                    </span>
+                  <div className="flex items-center gap-4">
+                    <Link
+                      href="/profile"
+                      className={`flex items-center gap-2 text-xs tracking-wider transition-colors ${
+                        pathname === '/profile' ? 'text-[#c8973a]' : 'text-[#7a6e5c] hover:text-[#c8973a]'
+                      }`}
+                    >
+                      <User className="w-4 h-4" />
+                      MY ACCOUNT
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="p-2 text-[#7a6e5c] hover:text-[#c8973a] transition-colors"
@@ -108,13 +114,22 @@ export function Navbar() {
                     </button>
                   </div>
                 ) : (
-                  <Link
-                    href="/auth/login"
-                    className="flex items-center gap-2 text-xs tracking-wider text-[#7a6e5c] hover:text-[#c8973a] transition-colors"
-                  >
-                    <User className="w-4 h-4" />
-                    SIGN IN
-                  </Link>
+                  <div className="flex items-center gap-6">
+                    <Link
+                      href="/auth/login"
+                      className={`text-xs tracking-wider transition-colors ${
+                        pathname === '/auth/login' ? 'text-[#c8973a]' : 'text-[#7a6e5c] hover:text-[#c8973a]'
+                      }`}
+                    >
+                      SIGN IN
+                    </Link>
+                    <Link
+                      href="/auth/signup"
+                      className="px-4 py-2 bg-[#c8973a]/10 border border-[#c8973a]/20 text-[#c8973a] text-[10px] tracking-widest hover:bg-[#c8973a] hover:text-[#080706] transition-all duration-300"
+                    >
+                      SIGN UP
+                    </Link>
+                  </div>
                 )}
               </div>
 
@@ -201,25 +216,44 @@ export function Navbar() {
                 className="mt-4"
               >
                 {user ? (
-                  <div className="flex flex-col items-center gap-3">
-                    <span className="text-sm text-[#7a6e5c]">{user.name || user.email}</span>
+                  <div className="flex flex-col items-center gap-6">
+                    <Link
+                      href="/profile"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`flex items-center gap-2 text-lg font-serif transition-colors ${
+                        pathname === '/profile' ? 'text-[#c8973a]' : 'text-[#f0e8d5]'
+                      }`}
+                    >
+                      <User className="w-5 h-5 text-[#c8973a]" />
+                      My Account
+                    </Link>
                     <button
                       onClick={handleLogout}
-                      className="flex items-center gap-2 text-sm text-[#c8973a] hover:underline"
+                      className="flex items-center gap-2 text-sm text-[#7a6e5c] hover:text-red-500 transition-colors"
                     >
                       <LogOut className="w-4 h-4" />
                       Sign Out
                     </button>
                   </div>
                 ) : (
-                  <Link
-                    href="/auth/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-2 text-sm text-[#c8973a] hover:underline"
-                  >
-                    <User className="w-4 h-4" />
-                    Sign In
-                  </Link>
+                  <div className="flex flex-col items-center gap-6">
+                    <Link
+                      href="/auth/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className={`text-lg font-serif transition-colors ${
+                        pathname === '/auth/login' ? 'text-[#c8973a]' : 'text-[#f0e8d5]'
+                      }`}
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      href="/auth/signup"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="px-8 py-3 bg-[#c8973a] text-[#080706] text-sm font-medium tracking-widest"
+                    >
+                      SIGN UP
+                    </Link>
+                  </div>
                 )}
               </motion.div>
               
