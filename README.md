@@ -246,7 +246,7 @@ This project is open source and available under the MIT License.
 
 **Bereket Worana**
 - GitHub: [@BereketWorana](https://github.com/BereketWorana)
-- Email: [Add your email]
+- Email: [bereketworana@gmail.com]
 
 ## 🎓 Learning Value
 
