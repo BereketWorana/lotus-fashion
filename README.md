@@ -16,7 +16,7 @@ Lotus Fashion is a full-featured e-commerce application that demonstrates:
 
 ## 🚀 Live Demo
 
-**[Visit Lotus Fashion](https://lotus-fashion.vercel.app)** ✨
+**[Visit Lotus Fashion](https://lotus-ethiopia.vercel.app/)** ✨
 
 ## ✨ Key Features
 
