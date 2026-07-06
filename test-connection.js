@@ -1,10 +1,21 @@
 // test-connection.js
 import { Client, Databases } from 'node-appwrite';
+import dotenv from 'dotenv';
 
-// REPLACE THESE WITH YOUR ACTUAL VALUES
-const ENDPOINT = 'https://nyc.cloud.appwrite.io/v1';
-const PROJECT_ID = '69e9cc62003e59c9ab50'; // Find this in Appwrite Console > Settings > General
-const API_KEY = 'standard_760dcdc3da35a61a98f62c92b53d1c630fd15704d46812cc82fbd10920f016a10c7ebb5b2ffc4bd608c270564b1a312f7ff953d57ab7ad39e2b3ecc7431ae0fd44f7f6e8afc621c93047251d4a3b112afbf989b734775ecd398957a66b53df6a033595ca02f7f539afcd14b5d90e46ef947535016dbc547816fe95c80bc2f151' // Create this in Appwrite Console > API Keys
+dotenv.config({ path: '.env.local' });
+
+// Load from environment variables
+const ENDPOINT = process.env.APPWRITE_ENDPOINT || 'https://nyc.cloud.appwrite.io/v1';
+const PROJECT_ID = process.env.APPWRITE_PROJECT_ID;
+const API_KEY = process.env.APPWRITE_API_KEY;
+
+if (!PROJECT_ID || !API_KEY) {
+    console.error('❌ Missing required environment variables!');
+    console.error('   Please set these in your .env.local file:');
+    console.error('   - APPWRITE_PROJECT_ID');
+    console.error('   - APPWRITE_API_KEY');
+    process.exit(1);
+}
 
 console.log('🔄 Testing Appwrite connection...');
 console.log(`Endpoint: ${ENDPOINT}`);
