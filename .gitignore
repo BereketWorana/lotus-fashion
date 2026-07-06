@@ -11,7 +11,12 @@ next.user-config.*
 # Environment variables
 .env*.local
 
+# Setup and config files (contain sensitive IDs)
+setup.js
+test-connection.js
+appwrite.config.json
+
 # Common ignores
 node_modules/
 .next/
-.DS_Store.env.local
+.DS_Store
